@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Linkin Park Fan Page</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Navegación -->
+<header>
+  <nav class="nav-container">
+    <ul class="nav-left">
+      <li><a href="#banda">Banda</a></li>
+      <li><a href="#discografia">Discografía</a></li>
+    </ul>
+
+    <div class="logo-nav">
+      <img src="imagenes/logo.png" alt="Logo Linkin Park">
+    </div>
+
+    <ul class="nav-right">
+      <li><a href="#galeria">Galería</a></li>
+      <li><a href="#comentarios">Comentarios</a></li>
+    </ul>
+  </nav>
+</header>
+
+  <!-- Sección: Banda -->
+<section id="banda">
+  <h2>Inicios</h2>
+  <div class="contenido">
+    <img src="imagenes/banda.jpg" alt="Banda Linkin Park">
+    <p>LINKIN PARK es una banda formada a fines de los 90 en 
+California, cuando unos chicos con influencias muy distintas 
+—rock, rap, electrónica— se juntaron a hacer algo que en 
+ese momento no era común. Después de varios rechazos, 
+la llegada de Chester Bennington como cantante fue el punto 
+de quiebre. Ahí nació el sonido que los haría conocidos: 
+una mezcla pesada pero emocional, con letras que hablaban 
+de lo que muchos sentían pero no sabían cómo decir.
+</p>
+  </div>
+
+  <h3>Primer álbum y primer impacto</h3>
+  <div class="contenido reverse"> <!-- <-- ACÁ va el cambio -->
+    <p>En el 2000 explotaron con Hybrid Theory, un disco que pegó fuerte en todo el mundo, sobre todo entre adolescentes que se sentían perdidos o cargados de frustraciones. Canciones como  “In the End” o “Crawling” los pusieron en la cima.  Después 
+sacaron el disco: “Meteora”, que reafirmó su lugar, y con los años  fueron cambiando el estilo, probando cosas nuevas. Algunos lo bancaron, otros no tanto, pero nunca se quedaron en lo mismo. La banda creció, maduró y se fue volviendo más introspectiva.</p>
+    <img src="imagenes/linkin2.jpg" alt="Foto de la banda">
+  </div>
+
+  <h3>Una gran pérdida, una gran tristeza</h3>
+  <div class="contenido">
+    <img src="imagenes/chester.jpg" alt="Chester Bennington">
+    <p>En 2017, la muerte de Chester Bennington fue un golpe durísimo. 
+Él venía luchando con temas personales y depresiones y eso 
+marcó un antes y un después. Desde entonces, la banda no 
+se separó oficialmente pero tuvieron una larga pausa de inactivad
+salvo por publicaciones ineditas de canciones que nunca han
+salido a la luz y que volvian a traer en sus canciones a la voz
+de Chester Bennington causando emocion y recuerdos a los fans. 
+</p>
+  </div>
+</section>
+
+  <!-- Sección: Discografía -->
+<section id="discografia">
+  <h2>Discografía</h2>
+  <div class="albumes">
+
+    <div class="album">
+      <img src="imagenes/hybrid.jpg" alt="Hybrid Theory">
+      <p>Hybrid Theory<br><small>2000</small></p>
+    </div>
+
+    <div class="album">
+      <img src="imagenes/meteora.jpg" alt="Meteora">
+      <p>Meteora<br><small>2003</small></p>
+    </div>
+
+    <div class="album">
+      <img src="imagenes/minutes.jpg" alt="Minutes to Midnight">
+      <p>Minutes to Midnight<br><small>2007</small></p>
+    </div>
+
+    <div class="album">
+      <img src="imagenes/thousand.jpg" alt="A Thousand Suns">
+      <p>A Thousand Suns<br><small>2010</small></p>
+    </div>
+
+    <div class="album">
+      <img src="imagenes/living.jpg" alt="Living Things">
+      <p>Living Things<br><small>2012</small></p>
+    </div>
+
+    <div class="album">
+      <img src="imagenes/hunting.jpg" alt="The Hunting Party">
+      <p>The Hunting Party<br><small>2014</small></p>
+    </div>
+
+    <div class="album">
+      <img src="imagenes/onemore.jpg" alt="One More Light">
+      <p>One More Light<br><small>2017</small></p>
+    </div>
+    </div>
+</section>
+
+  <!-- Sección: Galería -->
+<section id="galeria">
+  <h2>Galería</h2>
+
+  <div class="carrusel">
+    <button class="prev">&#10094;</button>
+
+    <div class="imagenes">
+      <img src="imagenes/foto1.jpg" alt="Imagen 1">
+      <img src="imagenes/foto2.jpg" alt="Imagen 2">
+      <img src="imagenes/foto3.jpg" alt="Imagen 3">
+      <img src="imagenes/foto4.jpg" alt="Imagen 4">
+      <img src="imagenes/foto5.jpg" alt="Imagen 5">
+      <img src="imagenes/foto6.jpg" alt="Imagen 6">
+      <img src="imagenes/foto7.jpg" alt="Imagen 7">
+      <img src="imagenes/foto8.jpg" alt="Imagen 8">
+      <img src="imagenes/foto9.jpg" alt="Imagen 9">
+      <img src="imagenes/foto10.jpg" alt="Imagen 10">
+    </div>
+
+    <button class="next">&#10095;</button>
+  </div>
+</section>
+
+<section id="comentarios">
+  <h2>Dejá tu comentario</h2>
+
+  <form id="comentarioForm">
+    <input type="text" id="nombre" placeholder="Tu nombre" required><br><br>
+    <textarea id="mensaje" rows="4" placeholder="Tu comentario..." required></textarea><br><br>
+    <button type="submit">Enviar</button>
+  </form>
+
+  <div id="comentariosList"></div>
+</section>
+
+  <!-- Pie de página -->
+  <footer>
+    <p>All Rights Reserved © Copyright 2025</p>
+    <p>linkinparkfanpage</p>
+  </footer>
+
+<script>
+  const imagenes = document.querySelector(".imagenes");
+  const total = imagenes.children.length;
+  let index = 0;
+
+  document.querySelector(".next").addEventListener("click", () => {
+    index = (index + 1) % total;
+    actualizarCarrusel();
+  });
+
+  document.querySelector(".prev").addEventListener("click", () => {
+    index = (index - 1 + total) % total;
+    actualizarCarrusel();
+  });
+
+  function actualizarCarrusel() {
+    const width = imagenes.clientWidth;
+    imagenes.style.transform = `translateX(-${index * width}px)`;
+  }
+
+  window.addEventListener("resize", actualizarCarrusel);
+</script>
+<script src="app.js"></script>
+</body>
+</html>

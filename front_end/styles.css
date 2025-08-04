@@ -1,0 +1,274 @@
+/* Estilos generales */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to bottom, #000, #444);
+  color: white;
+}
+
+/* Navegación */
+header {
+  background-color: black;
+  text-align: center;
+  padding: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: center; /* <-- cambia esto */
+  align-items: center;
+  background-color: black;
+  padding: 10px 30px;
+  flex-wrap: wrap;
+  gap: 40px; /* nuevo: agrega espacio entre ítems */
+}
+.nav-left,
+.nav-right {
+  display: flex;
+  gap: 20px; /* más chico ahora */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+/* Estilos comunes para los links */
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Logo centrado */
+.logo-nav img {
+  height: 60px;
+}
+
+/* Estilos generales para secciones */
+/* Estilos generales para secciones */
+section {
+  padding: 40px 20px;
+  max-width: 1000px; /* Ancho máximo de la sección */
+  margin: 0 auto; /* Centrar la sección */
+}
+
+/* Contenedor principal de imagen y texto */
+.contenido {
+  display: flex; /* Habilitar Flexbox */
+  gap: 20px; /* Espacio entre los elementos (imagen y texto) */
+  margin-bottom: 40px; /* Margen inferior para separar secciones */
+  align-items: center; /* Centrar verticalmente los elementos dentro del contenedor */
+  /* Por defecto, la imagen estará a la izquierda y el texto a la derecha */
+}
+
+/* Clase para invertir el orden (texto a la izquierda, imagen a la derecha) */
+.contenido.reverse {
+  flex-direction: row-reverse; /* Invierte el orden de los elementos */
+}
+
+/* Estilos para las imágenes dentro de .contenido */
+.contenido img {
+  width: 300px; /* Ancho fijo para las imágenes en escritorio */
+  flex-shrink: 0; /* Evita que la imagen se encoja cuando no hay espacio */
+  object-fit: cover; /* Asegura que la imagen cubra su espacio sin distorsión */
+  height: auto; /* Mantiene la proporción de la imagen */
+}
+
+/* Estilos para los párrafos dentro de .contenido */
+.contenido p {
+  flex: 1; /* Permite que el párrafo crezca y ocupe el espacio restante */
+  min-width: 250px; /* Opcional: Asegura un ancho mínimo para el texto antes de apilarse */
+}
+
+/* Media Query para pantallas pequeñas (ej. móviles y tabletas) */
+@media (max-width: 768px) {
+  .contenido {
+    flex-direction: column; /* Apila los elementos verticalmente */
+    text-align: center; /* Centra el texto cuando están apilados */
+  }
+
+  /* Asegura que la clase reverse también apile los elementos */
+  .contenido.reverse {
+    flex-direction: column; /* También apila en el modo "reverse" */
+  }
+
+  .contenido img {
+    width: 100%; /* La imagen ocupa todo el ancho disponible */
+    max-width: 300px; /* Limita el tamaño máximo de la imagen apilada */
+    margin-bottom: 15px; /* Pequeño margen inferior para separar la imagen del texto */
+  }
+
+  .contenido p {
+    min-width: unset; /* Reinicia el ancho mínimo para el texto en móvil */
+  }
+}
+.albumes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.album {
+  width: 180px;
+  text-align: center;
+}
+
+.album img {
+  width: 100%;
+  height: auto;
+  border: 2px solid #444;
+  transition: transform 0.3s ease;
+}
+
+.album img:hover {
+  transform: scale(1.05);
+}
+
+.album p {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.album small {
+  display: block;
+  font-weight: normal;
+  color: #ccc;
+}
+
+/* Carrusel */
+.carrusel {
+  position: relative;
+  width: 90%;
+  max-width: 700px;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 2px solid #666;
+  background-color: #222;
+}
+
+.imagenes {
+  display: flex;
+  transition: transform 0.5s ease;
+  width: 100%;
+}
+
+.imagenes img {
+  width: 100%;
+  flex-shrink: 0;
+  object-fit: cover;
+  height: 400px;
+}
+
+.carrusel button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  background-color: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 1;
+}
+
+.prev {
+  left: 0;
+}
+
+.next {
+  right: 0;
+}
+
+
+/* Comentarios */
+/* Comentarios */
+#comentarios {
+  background-color: #111;
+  padding: 40px 20px;
+  color: white;
+  text-align: center;
+}
+
+#comentarios h2 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  color: #e0e0e0;
+}
+
+/* Formulario */
+#comentarioForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 500px;
+  margin: 0 auto 30px;
+}
+
+#comentarioForm input,
+#comentarioForm textarea {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #444;
+  background-color: #222;
+  color: white;
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+#comentarioForm input::placeholder,
+#comentarioForm textarea::placeholder {
+  color: #aaa;
+}
+
+#comentarioForm button {
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#comentarioForm button:hover {
+  background-color: #ccc;
+}
+
+/* Lista de comentarios */
+#comentariosList {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: left;
+  background-color: #1a1a1a;
+  padding: 20px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+#comentariosList div {
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #333;
+}
+
+#comentariosList strong {
+  color: #e50914;
+}
+
+
+/* Footer */
+footer {
+  background-color: black;
+  text-align: center;
+  padding: 20px;
+  margin-top: 50px;
+}
+
