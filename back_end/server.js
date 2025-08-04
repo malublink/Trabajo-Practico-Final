@@ -3,7 +3,7 @@ const path = require('path');
 const app = express();
 const PORT = 3000;
 
-// 💾 Almacenamiento en memoria (por ahora)
+
 let comentarios = [];
 
 app.use(express.json());
