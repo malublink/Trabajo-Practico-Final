@@ -4,6 +4,8 @@ document.getElementById('comentarioForm').addEventListener('submit', async (e) =
   const nombre = document.getElementById('nombre').value;
   const mensaje = document.getElementById('mensaje').value;
 
+  if (!nombre || !mensaje) return;
+
   const res = await fetch('/comentarios', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -12,6 +14,18 @@ document.getElementById('comentarioForm').addEventListener('submit', async (e) =
 
   const comentarios = await res.json();
   mostrarComentarios(comentarios);
+});
+
+  // Limpiar campos
+  document.getElementById('nombre').value = '';
+  document.getElementById('mensaje').value = '';
+;
+
+document.getElementById('mensaje').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    document.getElementById('comentarioForm').requestSubmit();
+  }
 });
 
 async function cargarComentarios() {
