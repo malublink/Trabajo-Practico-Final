@@ -4,10 +4,11 @@ const pool = require("./data/db.js"); // conexión a PostgreSQL
 const crearTablas = require("./data/initDB");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../front_end")));
+
 
 // Página principal
 app.get("/", (req, res) => {

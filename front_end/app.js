@@ -29,11 +29,10 @@ document.getElementById('mensaje').addEventListener('keydown', function(e) {
 });
 
 async function cargarComentarios() {
-  const res = await fetch('http://localhost:3000/comentarios');
+  const res = await fetch('/comentarios');
   const comentarios = await res.json();
   mostrarComentarios(comentarios);
 }
-
 function mostrarComentarios(comentarios) {
   const lista = document.getElementById('comentariosList');
   lista.innerHTML = '';
@@ -58,7 +57,6 @@ async function eliminarComentario(id, div) {
   if (!confirmar) return;
 
   await fetch(`/comentarios/${id}`, { method: 'DELETE' });
-  div.remove();
+  div.remove(); // directamente borra el comentario del DOM
 }
-
 window.onload = cargarComentarios;
