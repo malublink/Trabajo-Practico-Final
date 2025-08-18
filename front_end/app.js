@@ -6,18 +6,28 @@ document.getElementById('comentarioForm').addEventListener('submit', async (e) =
 
   if (!nombre || !mensaje) return;
 
-  const res = await fetch('/comentarios', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nombre, mensaje })
-  });
+  try {
+    const res = await fetch('/comentarios', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, mensaje })
+    });
 
-  const nuevoComentario = await res.json();
-  agregarComentario(nuevoComentario);
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error("❌ Error guardando comentario:", errorText);
+      return;
+    }
 
-  // Limpiar campos
-  document.getElementById('nombre').value = '';
-  document.getElementById('mensaje').value = '';
+    const nuevoComentario = await res.json();
+    agregarComentario(nuevoComentario);
+
+    // Limpiar campos
+    document.getElementById('nombre').value = '';
+    document.getElementById('mensaje').value = '';
+  } catch (err) {
+    console.error("❌ Error de red:", err);
+  }
 });
 
 // Enviar con Enter
@@ -29,10 +39,21 @@ document.getElementById('mensaje').addEventListener('keydown', function(e) {
 });
 
 async function cargarComentarios() {
-  const res = await fetch('/comentarios');
-  const comentarios = await res.json();
-  mostrarComentarios(comentarios);
+  try {
+    const res = await fetch('/comentarios');
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error("❌ Error cargando comentarios:", errorText);
+      return;
+    }
+
+    const comentarios = await res.json();
+    mostrarComentarios(comentarios);
+  } catch (err) {
+    console.error("❌ Error de red:", err);
+  }
 }
+
 function mostrarComentarios(comentarios) {
   const lista = document.getElementById('comentariosList');
   lista.innerHTML = '';
@@ -56,7 +77,17 @@ async function eliminarComentario(id, div) {
   const confirmar = confirm("¿Seguro que querés borrar este comentario?");
   if (!confirmar) return;
 
-  await fetch(`/comentarios/${id}`, { method: 'DELETE' });
-  div.remove(); // directamente borra el comentario del DOM
+  try {
+    const res = await fetch(`/comentarios/${id}`, { method: 'DELETE' });
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error("❌ Error eliminando comentario:", errorText);
+      return;
+    }
+    div.remove();
+  } catch (err) {
+    console.error("❌ Error de red:", err);
+  }
 }
+
 window.onload = cargarComentarios;

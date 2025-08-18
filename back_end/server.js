@@ -4,11 +4,10 @@ const pool = require("./data/db.js"); // conexión a PostgreSQL
 const crearTablas = require("./data/initDB");
 
 const app = express();
-const PORT = process.env.PORT || 3000;;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../front_end")));
-
 
 // Página principal
 app.get("/", (req, res) => {
@@ -21,25 +20,27 @@ app.get("/comentarios", async (req, res) => {
     const result = await pool.query("SELECT * FROM comentarios ORDER BY id DESC");
     res.json(result.rows);
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Error al obtener comentarios");
+    console.error("❌ Error al obtener comentarios:", err);
+    res.status(500).json({ error: "Error al obtener comentarios" });
   }
 });
 
 // 🔹 Guardar nuevo comentario
 app.post("/comentarios", async (req, res) => {
   const { nombre, mensaje } = req.body;
-  if (!nombre || !mensaje) return res.status(400).send("Faltan datos");
+  if (!nombre || !mensaje) {
+    return res.status(400).json({ error: "Faltan datos" });
+  }
 
   try {
     const result = await pool.query(
       "INSERT INTO comentarios (nombre, mensaje) VALUES ($1, $2) RETURNING *",
       [nombre, mensaje]
     );
-    res.json(result.rows[0]);
+    res.json(result.rows[0]); // devuelve el comentario recién creado
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Error al guardar comentario");
+    console.error("❌ Error al guardar comentario:", err);
+    res.status(500).json({ error: "Error al guardar comentario" });
   }
 });
 
@@ -48,10 +49,10 @@ app.delete("/comentarios/:id", async (req, res) => {
   const { id } = req.params;
   try {
     await pool.query("DELETE FROM comentarios WHERE id = $1", [id]);
-    res.sendStatus(204);
+    res.json({ success: true, id }); // ✅ respuesta JSON en vez de sendStatus
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Error al eliminar comentario");
+    console.error("❌ Error al eliminar comentario:", err);
+    res.status(500).json({ error: "Error al eliminar comentario" });
   }
 });
 
