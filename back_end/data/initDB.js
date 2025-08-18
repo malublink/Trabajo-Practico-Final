@@ -10,9 +10,9 @@ async function crearTablas() {
       )
     `);
     console.log("✅ Tabla 'comentarios' verificada/creada");
-  } catch (err) {
+    } catch (err) {
     console.error("❌ Error creando la tabla:", err);
-  }
+    }
 }
 
 module.exports = crearTablas;
