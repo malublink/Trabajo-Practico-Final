@@ -29,7 +29,7 @@ document.getElementById('mensaje').addEventListener('keydown', function(e) {
 });
 
 async function cargarComentarios() {
-  const res = await fetch('http://localhost:${PORT}/comentarios');
+  const res = await fetch('http://localhost:3000/comentarios');
   const comentarios = await res.json();
   mostrarComentarios(comentarios);
 }
