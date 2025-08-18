@@ -1,4 +1,4 @@
-document.getElementById('comentarioForm').addEventListener('submit', async (e) => {
+document.getElementById('comentarioForm').addEventListener('submit', async (e) => { 
   e.preventDefault();
 
   const nombre = document.getElementById('nombre').value;
@@ -12,15 +12,15 @@ document.getElementById('comentarioForm').addEventListener('submit', async (e) =
     body: JSON.stringify({ nombre, mensaje })
   });
 
-  const comentarios = await res.json();
-  mostrarComentarios(comentarios);
-});
+  const nuevoComentario = await res.json();
+  agregarComentario(nuevoComentario);
 
   // Limpiar campos
   document.getElementById('nombre').value = '';
   document.getElementById('mensaje').value = '';
-;
+});
 
+// Enviar con Enter
 document.getElementById('mensaje').addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
@@ -37,29 +37,28 @@ async function cargarComentarios() {
 function mostrarComentarios(comentarios) {
   const lista = document.getElementById('comentariosList');
   lista.innerHTML = '';
-  comentarios.forEach((c, index) => {
-    const div = document.createElement('div');
-    div.innerHTML = `
-      <strong>${c.nombre}</strong>: ${c.mensaje}
-      <button onclick="eliminarComentario(${index})" style="margin-left: 10px; color: red; background: none; border: none; cursor: pointer;">❌</button>
-    `;
-    lista.appendChild(div);
-  });
+  comentarios.forEach(c => agregarComentario(c));
 }
 
-async function eliminarComentario(index) {
+function agregarComentario(c) {
+  const lista = document.getElementById('comentariosList');
+  const div = document.createElement('div');
+  div.innerHTML = `
+    <strong>${c.nombre}</strong>: ${c.mensaje}
+    <button onclick="eliminarComentario(${c.id}, this.parentElement)" 
+      style="margin-left: 10px; color: red; background: none; border: none; cursor: pointer;">
+      ❌
+    </button>
+  `;
+  lista.prepend(div);
+}
+
+async function eliminarComentario(id, div) {
   const confirmar = confirm("¿Seguro que querés borrar este comentario?");
-  
-  if (!confirmar) return; // Si el usuario cancela, no hace nada
+  if (!confirmar) return;
 
-  const res = await fetch(`/comentarios/${index}`, {
-    method: 'DELETE'
-  });
-
-  const comentarios = await res.json();
-  mostrarComentarios(comentarios);
+  await fetch(`/comentarios/${id}`, { method: 'DELETE' });
+  div.remove();
 }
-
 
 window.onload = cargarComentarios;
-
