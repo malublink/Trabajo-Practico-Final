@@ -1,4 +1,4 @@
-document.getElementById('comentarioForm').addEventListener('submit', async (e) => { 
+document.getElementById('comentarioForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const nombre = document.getElementById('nombre').value;
@@ -6,31 +6,21 @@ document.getElementById('comentarioForm').addEventListener('submit', async (e) =
 
   if (!nombre || !mensaje) return;
 
-  try {
-    const res = await fetch('/comentarios', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nombre, mensaje })
-    });
+  const res = await fetch('/comentarios', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nombre, mensaje })
+  });
 
-    if (!res.ok) {
-      const errorText = await res.text();
-      console.error("❌ Error guardando comentario:", errorText);
-      return;
-    }
-
-    const nuevoComentario = await res.json();
-    agregarComentario(nuevoComentario);
-
-    // Limpiar campos
-    document.getElementById('nombre').value = '';
-    document.getElementById('mensaje').value = '';
-  } catch (err) {
-    console.error("❌ Error de red:", err);
-  }
+  const comentarios = await res.json();
+  mostrarComentarios(comentarios);
 });
 
-// Enviar con Enter
+  // Limpiar campos
+  document.getElementById('nombre').value = '';
+  document.getElementById('mensaje').value = '';
+;
+
 document.getElementById('mensaje').addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
@@ -39,55 +29,37 @@ document.getElementById('mensaje').addEventListener('keydown', function(e) {
 });
 
 async function cargarComentarios() {
-  try {
-    const res = await fetch('/comentarios');
-    if (!res.ok) {
-      const errorText = await res.text();
-      console.error("❌ Error cargando comentarios:", errorText);
-      return;
-    }
-
-    const comentarios = await res.json();
-    mostrarComentarios(comentarios);
-  } catch (err) {
-    console.error("❌ Error de red:", err);
-  }
+  const res = await fetch('/comentarios');
+  const comentarios = await res.json();
+  mostrarComentarios(comentarios);
 }
 
 function mostrarComentarios(comentarios) {
   const lista = document.getElementById('comentariosList');
   lista.innerHTML = '';
-  comentarios.forEach(c => agregarComentario(c));
+  comentarios.forEach((c, index) => {
+    const div = document.createElement('div');
+    div.innerHTML = `
+      <strong>${c.nombre}</strong>: ${c.mensaje}
+      <button onclick="eliminarComentario(${index})" style="margin-left: 10px; color: red; background: none; border: none; cursor: pointer;">❌</button>
+    `;
+    lista.appendChild(div);
+  });
 }
 
-function agregarComentario(c) {
-  const lista = document.getElementById('comentariosList');
-  const div = document.createElement('div');
-  div.innerHTML = `
-    <strong>${c.nombre}</strong>: ${c.mensaje}
-    <button onclick="eliminarComentario(${c.id}, this.parentElement)" 
-      style="margin-left: 10px; color: red; background: none; border: none; cursor: pointer;">
-      ❌
-    </button>
-  `;
-  lista.prepend(div);
-}
-
-async function eliminarComentario(id, div) {
+async function eliminarComentario(index) {
   const confirmar = confirm("¿Seguro que querés borrar este comentario?");
-  if (!confirmar) return;
+  
+  if (!confirmar) return; // Si el usuario cancela, no hace nada
 
-  try {
-    const res = await fetch(`/comentarios/${id}`, { method: 'DELETE' });
-    if (!res.ok) {
-      const errorText = await res.text();
-      console.error("❌ Error eliminando comentario:", errorText);
-      return;
-    }
-    div.remove();
-  } catch (err) {
-    console.error("❌ Error de red:", err);
-  }
+  const res = await fetch(`/comentarios/${index}`, {
+    method: 'DELETE'
+  });
+
+  const comentarios = await res.json();
+  mostrarComentarios(comentarios);
 }
+
 
 window.onload = cargarComentarios;
+

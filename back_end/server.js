@@ -1,63 +1,56 @@
-const express = require("express");
-const path = require("path");
-const pool = require("./data/db.js"); // conexión a PostgreSQL
-const crearTablas = require("./data/initDB");
-
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
+
+const comentariosPath = path.join(__dirname, 'comentarios.json');
+
+// 🧠 Leer los comentarios guardados en el archivo
+let comentarios = [];
+if (fs.existsSync(comentariosPath)) {
+  const data = fs.readFileSync(comentariosPath, 'utf-8');
+  comentarios = JSON.parse(data);
+}
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "../front_end")));
+app.use(express.static(path.join(__dirname, '../front_end')));
 
-// Página principal
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../front_end/index.html"));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../front_end/index.html'));
 });
 
-// 🔹 Obtener comentarios
-app.get("/comentarios", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT * FROM comentarios ORDER BY id DESC");
-    res.json(result.rows);
-  } catch (err) {
-    console.error("❌ Error al obtener comentarios:", err);
-    res.status(500).json({ error: "Error al obtener comentarios" });
-  }
+// Obtener comentarios
+app.get('/comentarios', (req, res) => {
+  res.json(comentarios);
 });
 
-// 🔹 Guardar nuevo comentario
-app.post("/comentarios", async (req, res) => {
+// Guardar nuevo comentario
+app.post('/comentarios', (req, res) => {
   const { nombre, mensaje } = req.body;
-  if (!nombre || !mensaje) {
-    return res.status(400).json({ error: "Faltan datos" });
+  if (nombre && mensaje) {
+    const nuevoComentario = { nombre, mensaje };
+    comentarios.push(nuevoComentario);
+
+    const fs = require('fs'); 
+
+
+app.delete('/comentarios/:index', (req, res) => {
+  const index = parseInt(req.params.index);
+
+  if (!isNaN(index) && index >= 0 && index < comentarios.length) {
+    comentarios.splice(index, 1);
+    fs.writeFileSync(comentariosPath, JSON.stringify(comentarios, null, 2));
   }
 
-  try {
-    const result = await pool.query(
-      "INSERT INTO comentarios (nombre, mensaje) VALUES ($1, $2) RETURNING *",
-      [nombre, mensaje]
-    );
-    res.json(result.rows[0]); // devuelve el comentario recién creado
-  } catch (err) {
-    console.error("❌ Error al guardar comentario:", err);
-    res.status(500).json({ error: "Error al guardar comentario" });
-  }
+  res.json(comentarios);
 });
 
-// 🔹 Eliminar comentario
-app.delete("/comentarios/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    await pool.query("DELETE FROM comentarios WHERE id = $1", [id]);
-    res.json({ success: true, id }); // ✅ respuesta JSON en vez de sendStatus
-  } catch (err) {
-    console.error("❌ Error al eliminar comentario:", err);
-    res.status(500).json({ error: "Error al eliminar comentario" });
+    // 💾 Guardar en el archivo
+    fs.writeFileSync(comentariosPath, JSON.stringify(comentarios, null, 2));
   }
+  res.json(comentarios);
 });
-
-// Inicializar tablas
-crearTablas();
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);

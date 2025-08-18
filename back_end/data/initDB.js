@@ -3,11 +3,11 @@ const pool = require("./db.js");
 async function crearTablas() {
   try {
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS comentarios (
-        id SERIAL PRIMARY KEY,
-        nombre TEXT NOT NULL,
-        mensaje TEXT NOT NULL
-      )
+CREATE TABLE IF NOT EXISTS comentarios (
+  id SERIAL PRIMARY KEY,
+  nombre TEXT NOT NULL,
+  mensaje TEXT NOT NULL
+);
     `);
     console.log("✅ Tabla 'comentarios' verificada/creada");
     } catch (err) {
