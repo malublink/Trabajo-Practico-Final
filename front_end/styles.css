@@ -53,32 +53,24 @@ section {
   margin: 0 auto; /* Centrar la sección */
 }
 
-/* Contenedor principal de imagen y texto */
 .contenido {
-  display: flex; /* Habilitar Flexbox */
-  gap: 20px; /* Espacio entre los elementos (imagen y texto) */
-  margin-bottom: 40px; /* Margen inferior para separar secciones */
-  align-items: center; /* Centrar verticalmente los elementos dentro del contenedor */
-  /* Por defecto, la imagen estará a la izquierda y el texto a la derecha */
+  display: flex;
+  gap: 20px;
+  margin-bottom: 40px;
+  align-items: center;
 }
 
-/* Clase para invertir el orden (texto a la izquierda, imagen a la derecha) */
 .contenido.reverse {
-  flex-direction: row-reverse; /* Invierte el orden de los elementos */
+  flex-direction: row-reverse;
 }
 
-/* Estilos para las imágenes dentro de .contenido */
 .contenido img {
-  width: 300px; /* Ancho fijo para las imágenes en escritorio */
-  flex-shrink: 0; /* Evita que la imagen se encoja cuando no hay espacio */
-  object-fit: cover; /* Asegura que la imagen cubra su espacio sin distorsión */
-  height: auto; /* Mantiene la proporción de la imagen */
+  width: 300px;
+  object-fit: cover;
 }
 
-/* Estilos para los párrafos dentro de .contenido */
 .contenido p {
-  flex: 1; /* Permite que el párrafo crezca y ocupe el espacio restante */
-  min-width: 250px; /* Opcional: Asegura un ancho mínimo para el texto antes de apilarse */
+  flex: 1;
 }
 
 /* Media Query para pantallas pequeñas (ej. móviles y tabletas) */
@@ -272,3 +264,30 @@ footer {
   margin-top: 50px;
 }
 
+.tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: 100%;   /* aparece debajo de la imagen */
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.85);
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  width: 220px;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.4;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.album-cover:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.album {
+  position: relative; /* para que el tooltip se ubique respecto al album */
+}
