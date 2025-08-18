@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const pool = require("./data/db"); // conexión a PostgreSQL
+const pool = require("./data/db.js"); // conexión a PostgreSQL
 const crearTablas = require("./data/initDB");
 
 const app = express();
