@@ -29,7 +29,7 @@ document.getElementById('mensaje').addEventListener('keydown', function(e) {
 });
 
 async function cargarComentarios() {
-  const res = await fetch('/comentarios');
+  const res = await fetch('https://trabajo-practico-final.onrender.com/comentarios');
   const comentarios = await res.json();
   mostrarComentarios(comentarios);
 }
