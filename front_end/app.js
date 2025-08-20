@@ -59,7 +59,7 @@ function mostrarComentarios(comentarios) {
 
 async function darLike(index, btn) {
   const res = await fetch(`/comentarios/${index}/like`, { method: 'POST' });
-  const comentario = await res.json();
+  const comentario = await res.json(); // 👈 ahora sí devuelve algo
   btn.innerHTML = `👍 ${comentario.likes}`;
 }
 

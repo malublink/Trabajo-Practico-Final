@@ -49,7 +49,7 @@ app.post('/comentarios/:index/like', (req, res) => {
   if (!isNaN(index) && index >= 0 && index < comentarios.length) {
     comentarios[index].likes++;
     fs.writeFileSync(comentariosPath, JSON.stringify(comentarios, null, 2));
-    return res.json(comentarios[index]);
+    return res.json(comentarios[index]); // 🔥 devolvemos el comentario actualizado
   }
 
   res.status(400).send("Comentario no encontrado");
