@@ -6,7 +6,7 @@ const PORT = 3000;
 
 const comentariosPath = path.join(__dirname, 'comentarios.json');
 
-// 🧠 Leer los comentarios guardados en el archivo
+// Leer comentarios guardados en el archivo
 let comentarios = [];
 if (fs.existsSync(comentariosPath)) {
   const data = fs.readFileSync(comentariosPath, 'utf-8');
@@ -20,21 +20,29 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../front_end/index.html'));
 });
 
-// Obtener comentarios
+// 👉 Obtener comentarios
 app.get('/comentarios', (req, res) => {
   res.json(comentarios);
 });
 
-// Guardar nuevo comentario
+// 👉 Guardar nuevo comentario
 app.post('/comentarios', (req, res) => {
   const { nombre, mensaje } = req.body;
   if (nombre && mensaje) {
-    const nuevoComentario = { nombre, mensaje };
+    const nuevoComentario = { 
+      nombre, 
+      mensaje, 
+      fecha: new Date().toLocaleString("es-AR") // 📅 fecha y hora en español
+    };
     comentarios.push(nuevoComentario);
 
-    const fs = require('fs'); 
+    // Guardar en el archivo
+    fs.writeFileSync(comentariosPath, JSON.stringify(comentarios, null, 2));
+  }
+  res.json(comentarios);
+});
 
-
+// 👉 Eliminar comentario por índice
 app.delete('/comentarios/:index', (req, res) => {
   const index = parseInt(req.params.index);
 
@@ -43,12 +51,6 @@ app.delete('/comentarios/:index', (req, res) => {
     fs.writeFileSync(comentariosPath, JSON.stringify(comentarios, null, 2));
   }
 
-  res.json(comentarios);
-});
-
-    // 💾 Guardar en el archivo
-    fs.writeFileSync(comentariosPath, JSON.stringify(comentarios, null, 2));
-  }
   res.json(comentarios);
 });
 

@@ -14,13 +14,13 @@ document.getElementById('comentarioForm').addEventListener('submit', async (e) =
 
   const comentarios = await res.json();
   mostrarComentarios(comentarios);
-});
 
-  // Limpiar campos
+  // ✅ limpiar los campos *después* de enviar
   document.getElementById('nombre').value = '';
   document.getElementById('mensaje').value = '';
-;
+});
 
+// 👉 Enviar con Enter
 document.getElementById('mensaje').addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
@@ -28,29 +28,35 @@ document.getElementById('mensaje').addEventListener('keydown', function(e) {
   }
 });
 
+// 👉 Cargar comentarios al inicio
 async function cargarComentarios() {
   const res = await fetch('/comentarios');
   const comentarios = await res.json();
   mostrarComentarios(comentarios);
 }
 
+// 👉 Mostrar comentarios
 function mostrarComentarios(comentarios) {
   const lista = document.getElementById('comentariosList');
   lista.innerHTML = '';
   comentarios.forEach((c, index) => {
     const div = document.createElement('div');
     div.innerHTML = `
-      <strong>${c.nombre}</strong>: ${c.mensaje}
-      <button onclick="eliminarComentario(${index})" style="margin-left: 10px; color: red; background: none; border: none; cursor: pointer;">❌</button>
+      <strong>${c.nombre}</strong> (${c.fecha || 'Sin fecha'}): 
+      ${c.mensaje}
+      <button onclick="eliminarComentario(${index})" 
+        style="margin-left: 10px; color: red; background: none; border: none; cursor: pointer;">
+        ❌
+      </button>
     `;
     lista.appendChild(div);
   });
 }
 
+// 👉 Eliminar comentario
 async function eliminarComentario(index) {
   const confirmar = confirm("¿Seguro que querés borrar este comentario?");
-  
-  if (!confirmar) return; // Si el usuario cancela, no hace nada
+  if (!confirmar) return;
 
   const res = await fetch(`/comentarios/${index}`, {
     method: 'DELETE'
@@ -60,6 +66,4 @@ async function eliminarComentario(index) {
   mostrarComentarios(comentarios);
 }
 
-
 window.onload = cargarComentarios;
-
