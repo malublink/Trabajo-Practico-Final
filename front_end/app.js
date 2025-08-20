@@ -44,13 +44,23 @@ function mostrarComentarios(comentarios) {
     div.innerHTML = `
       <strong>${c.nombre}</strong> (${c.fecha || 'Sin fecha'}): 
       ${c.mensaje}
-      <button onclick="eliminarComentario(${index})" 
+      <button onclick="eliminarComentario(${index})"
         style="margin-left: 10px; color: red; background: none; border: none; cursor: pointer;">
         ❌
+      </button>
+      <button onclick="darLike(${index}, this)" 
+        style="margin-left: 10px; color: blue; background: none; border: none; cursor: pointer;">
+        👍 ${c.likes || 0}
       </button>
     `;
     lista.appendChild(div);
   });
+}
+
+async function darLike(index, btn) {
+  const res = await fetch(`/comentarios/${index}/like`, { method: 'POST' });
+  const comentario = await res.json();
+  btn.innerHTML = `👍 ${comentario.likes}`;
 }
 
 // 👉 Eliminar comentario

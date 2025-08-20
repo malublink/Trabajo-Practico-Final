@@ -32,14 +32,27 @@ app.post('/comentarios', (req, res) => {
     const nuevoComentario = { 
       nombre, 
       mensaje, 
-      fecha: new Date().toLocaleString("es-AR") // 📅 fecha y hora en español
+      fecha: new Date().toLocaleString("es-AR"),
+      likes: 0  // 👍 inicial
     };
     comentarios.push(nuevoComentario);
 
-    // Guardar en el archivo
     fs.writeFileSync(comentariosPath, JSON.stringify(comentarios, null, 2));
   }
   res.json(comentarios);
+});
+
+// 👉 Dar like a un comentario
+app.post('/comentarios/:index/like', (req, res) => {
+  const index = parseInt(req.params.index);
+
+  if (!isNaN(index) && index >= 0 && index < comentarios.length) {
+    comentarios[index].likes++;
+    fs.writeFileSync(comentariosPath, JSON.stringify(comentarios, null, 2));
+    return res.json(comentarios[index]);
+  }
+
+  res.status(400).send("Comentario no encontrado");
 });
 
 // 👉 Eliminar comentario por índice
