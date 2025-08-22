@@ -35,11 +35,11 @@ async function cargarComentarios() {
   mostrarComentarios(comentarios);
 }
 
-// 👉 Mostrar comentarios
 function mostrarComentarios(comentarios) {
   const lista = document.getElementById('comentariosList');
   lista.innerHTML = '';
   comentarios.forEach((c, index) => {
+    const yaLikeado = localStorage.getItem(`like_${index}`) === "true";
     const div = document.createElement('div');
     div.innerHTML = `
       <strong>${c.nombre}</strong> (${c.fecha || 'Sin fecha'}): 
@@ -49,7 +49,7 @@ function mostrarComentarios(comentarios) {
         ❌
       </button>
       <button onclick="darLike(${index}, this)" 
-        style="margin-left: 10px; color: blue; background: none; border: none; cursor: pointer;">
+        style="margin-left: 10px; ${yaLikeado ? 'color: green;' : 'color: blue;'} background: none; border: none; cursor: pointer;">
         👍 ${c.likes || 0}
       </button>
     `;
@@ -58,9 +58,23 @@ function mostrarComentarios(comentarios) {
 }
 
 async function darLike(index, btn) {
-  const res = await fetch(`/comentarios/${index}/like`, { method: 'POST' });
-  const comentario = await res.json(); // 👈 ahora sí devuelve algo
+  const yaLikeado = localStorage.getItem(`like_${index}`) === "true";
+  const action = yaLikeado ? "unlike" : "like";
+
+  const res = await fetch(`/comentarios/${index}/like`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action })
+  });
+
+  const comentario = await res.json();
+
+  // actualizar UI
   btn.innerHTML = `👍 ${comentario.likes}`;
+  btn.style.color = yaLikeado ? "blue" : "green";
+
+  // actualizar localStorage
+  localStorage.setItem(`like_${index}`, !yaLikeado);
 }
 
 // 👉 Eliminar comentario
